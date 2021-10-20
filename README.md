@@ -35,12 +35,21 @@ python3 ../omamo_base.py ../data/OmaServer.h5 ../data/go_positive_annotations.ts
 Once the code finished running, the outputs include `${species}2.csv` files which should be combined to create a final dataframe using the code `omamo_dataframe.py`:
 
 ```
+cd ..
 python3 omamo_dataframe.py output
 ```
 
 where `output` is the name of the directory where the user wishes to save the output. 
 
-Finally, the output data frame is ready as a CSV file `omamo_output_df.csv`.
+Finally, the output data frame is ready as a CSV file `omamo_output_df.csv` with this format:
+
+```
+row    GO_ID   Species Human_Genes     Species_Genes   No.of_OGs  Average_func.similarity±st.dev      Score
+
+1       12      DICDI   DNLI4_HUMAN     DNLI4_DICDI     1.0     0.2848 ± 0.0000 0.28                                    
+2       18      DICDI   ERCC2_HUMAN,H10_HUMAN,MSH2_HUMAN,MSH6_HUMAN,RAD50_HUMAN,H11_HUMAN,H12_HUMAN,H14_HUMAN,H13_HUMAN,H15_HUMAN       ERCC2_DICDI,H1_DICDI,MSH2_DICDI,MSH6_DICDI,RAD50_DICDI,H1_DICDI,H1_DICDI,H1_DICDI,H1_DICDI,H1_DICDI     10.0    0.604 ± 0.2191  6.04                                    
+
+```
 
 
 
