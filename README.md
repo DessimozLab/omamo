@@ -41,13 +41,20 @@ python3 omamo_dataframe.py output
 
 where `output` is the name of the directory where the user wishes to save the output. 
 
-Finally, the output data frame is ready as a CSV file `omamo_output_df.csv` with this format:
+Finally, the output data frame is ready as a CSV file `omamo_output_df.csv`. For example, for the GO ID of `GO0000012`, OMAMO provides the following ranking for potential model organisms: 
+
 
 ```
+head -n 1 omamo_output_df.csv > ranked_organisms.csv
+awk '$2 == 12'  omamo_output_df.csv >> ranked_organisms.csv
+cat ranked_organisms.csv
+
+
 row    GO_ID   Species Human_Genes     Species_Genes   No.of_OGs  Average_func.similarity±st.dev      Score
 
-1       12      DICDI   DNLI4_HUMAN     DNLI4_DICDI     1.0     0.2848 ± 0.0000 0.28                                    
-2       18      DICDI   ERCC2_HUMAN,H10_HUMAN,MSH2_HUMAN,MSH6_HUMAN,RAD50_HUMAN,H11_HUMAN,H12_HUMAN,H14_HUMAN,H13_HUMAN,H15_HUMAN       ERCC2_DICDI,H1_DICDI,MSH2_DICDI,MSH6_DICDI,RAD50_DICDI,H1_DICDI,H1_DICDI,H1_DICDI,H1_DICDI,H1_DICDI     10.0    0.604 ± 0.2191  6.04                                    
+44	12	SCHPO	A0A024R6L5,A8K3W1	Q9USG9,Q9USR0	2	0.8179 ± 0.0986	1.64
+55	12	NEUCR	A0A024RE06	DNLI4_NEUCR	1	0.292 ± 0.0	0.29
+56	12	DICDI	A0A024RE06	Q54CR9	1	0.2848 ± 0.0	0.28
 
 ```
 
