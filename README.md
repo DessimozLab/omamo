@@ -81,7 +81,7 @@ Version 0.0.1
 
 ## Citation
 
-Alina Nicheperovich, Adrian M Altenhoff, Christophe Dessimoz, Sina Majidian, "OMAMO: orthology-based model organism selection", submitted to Bioinformatics journal.
+Alina Nicheperovich, Adrian M Altenhoff, Christophe Dessimoz, Sina Majidian, "OMAMO: orthology-based model organism selection", submitted to Bioinformatics journal, [preprint](https://www.biorxiv.org/content/10.1101/2021.11.04.467067v1).
 
 
 
