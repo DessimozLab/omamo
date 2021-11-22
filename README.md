@@ -13,7 +13,7 @@ The user can consider several species as potential model organisms and the algor
 
 
 ### Dependencies
-Following Python packages are needed: numpy, matplotlib, pickle and pandas. Besides, you need to install (pyOMA)[https://pypi.org/project/pyoma/].
+Following Python packages are needed: numpy, matplotlib, pickle and pandas. Besides, you need to install [pyOMA](https://pypi.org/project/pyoma).
 
 
 ## Pipeline
