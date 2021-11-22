@@ -12,9 +12,8 @@ OMAMO is a tool that suggests the best model organism to study a biological proc
 The user can consider several species as potential model organisms and the algorithm will rank them and report the output for a given biological process (searched as a GO term or a GO ID) is produced in the dataframe format.
 
 
-## Dependencies
-Following python packages are needed: numpy,matplotlib, pickle and pandas. Besides, you need to install (pyOMA)[https://pypi.org/project/pyoma/].
-
+# Dependencies
+Following Python packages are needed: numpy, matplotlib, pickle and pandas. Besides, you need to install (pyOMA)[https://pypi.org/project/pyoma/].
 
 
 ## Pipeline
