@@ -164,8 +164,13 @@ def write_csv(fpath, summary:pandas.DataFrame, detail:pandas.DataFrame):
     genes = genes.reset_index().pivot(index=["GOnr", "Species"], columns="Ref", values="Label").reset_index()\
         .rename(columns={0: "QuerySpeciesGenes", 1: "ModelSpeciesGenes"})
     result = pandas.merge(summary, genes, on=["GOnr", "Species"])
-    result.sort_values(by=["GOnr", "Species"], ignore_index=True, ascending=[True, False])
-    result.to_csv(fpath, sep="\t")
+    result.sort_values(by=["GOnr", "Score"], ignore_index=True, ascending=[True, False])
+    result.to_csv(fpath,
+                  columns=["GOnr", "Species", "QuerySpeciesGenes", "ModelSpeciesGenes",
+                           "NrOrthologs", "FuncSim_Mean", "FuncSim_Std", "Score"],
+                  float_format="%.4f",
+                  index=False,
+                  sep="\t")
 
 
 def build_omamo(db_path, ic, query, models, h5_out=None, tsv_out=None):
