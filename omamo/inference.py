@@ -114,7 +114,6 @@ def pivot_go_process(db, similar_orthologs, model_species):
 
 
 def compute_omamo_for_species(db_path, ic, query_species, model_species):
-    print(db_path, query_species, model_species, ic[2])
     with Database(db_path) as db:
         orthologs = find_orthologs(db, query_species, model_species)
         similar_orthologs = list(
