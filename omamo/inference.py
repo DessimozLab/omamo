@@ -103,7 +103,7 @@ def pivot_go_process(db, similar_orthologs, model_species):
             if go in sim_orth.processes:
                 for ref, gene in enumerate(sim_orth.ortholog):
                     if gene not in seen_genes:
-                        detail.append([(go, sp, ref, gene, gene_names[gene])])
+                        detail.append((go, sp, ref, gene, gene_names[gene],))
                         seen_genes.add(gene)
                 similarity.append(sim_orth.similarity)
         avg = stats.mean(similarity)
