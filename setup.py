@@ -8,7 +8,7 @@ with open('{:s}/__init__.py'.format(name), 'rt') as fp:
         if line.startswith('__version__'):
             exec(line.rstrip())
 
-requirements = ['numpy', 'pandas', 'tables', 'pyoma', 'tqdm']
+requirements = ['numpy', 'pandas', 'tables', 'pyoma', 'tqdm', 'importlib_resources; python_version < "3.9"']
 
 desc = 'OMAmo - orthology-based model organism selection'
 with open("README.md", encoding="utf-8") as f:
@@ -28,4 +28,9 @@ setup(
     python_requires=">=3.6",
     license='LGPLv3',
     scripts=['bin/omamo'],
+    package_data={
+        # Include any *.dat files found in the "data" subdirectory
+        # of the "omamo" package, also:
+        "omamo": ["data/*.dat"],
+    },
 )
