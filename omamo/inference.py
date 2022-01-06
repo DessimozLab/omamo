@@ -98,11 +98,13 @@ def pivot_go_process(db, similar_orthologs, model_species):
     gene_names = get_gene_names(db, similar_orthologs)
     sp = model_species.encode('utf-8')
     for go in go_processes:
-        similarity = []
+        similarity, seen_genes = [], set([])
         for sim_orth in similar_orthologs:
             if go in sim_orth.processes:
-                detail.extend([(go, sp, 0, sim_orth.ortholog[0], gene_names[sim_orth.ortholog[0]]),
-                               (go, sp, 1, sim_orth.ortholog[1], gene_names[sim_orth.ortholog[1]])])
+                for ref, gene in enumerate(sim_orth.ortholog):
+                    if gene not in seen_genes:
+                        detail.append([(go, sp, ref, gene, gene_names[gene])])
+                        seen_genes.add(gene)
                 similarity.append(sim_orth.similarity)
         avg = stats.mean(similarity)
         std = stats.stdev(similarity) if len(similarity) > 1 else 0
