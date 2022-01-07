@@ -9,14 +9,16 @@ from pyoma.browser.db import Database, GeneNameOrSymbolIdMapper, BestIdPerEntryO
 
 
 logger = logging.getLogger(__name__)
-OrthologsOverlapBioProcess = collections.namedtuple("OrthologsOverlapBioProcess", ["ortholog", "processes", "similarity"])
+OrthologsOverlapBioProcess = collections.namedtuple("OrthologsOverlapBioProcess",
+                                                    ["ortholog", "processes", "similarity"])
 
 SUMMARY_DTYPE = [("GOnr", "i4"), ("Species", "S5"), ("NrOrthologs", "i4"),
                  ("FuncSim_Mean", "f8"), ("FuncSim_Std", "f8"), ("Score", "f8")]
-DETAIL_DTYPE = [("GOnr", "i4"), ("Species", "S5"), ("Ref", "i1"), ("EntryNr", "i4"), ("Label", "S50")]
+DETAIL_DTYPE = [("GOnr", "i4"), ("Species", "S5"), ("Ref", "i1"), ("EntryNr", "i4"),
+                ("Label", "S50")]
 
 
-def find_orthologs(db:Database, query_species:str, model_species:str):
+def find_orthologs(db: Database, query_species: str, model_species: str):
     orthologs = db.get_vpairs_between_species_pair(query_species, model_species)
     return orthologs
 
@@ -42,8 +44,10 @@ def go_overlap(db, orthologs, inf_content, inf_threshold=5):
         annos1, annos2 = (get_go_anno_with_parents(pair[z]) for z in ('EntryNr1', 'EntryNr2'))
         # overlap and union contain term that have common/union annotations (any ontology) and a
         # information content >= inf_threshold
-        overlap = frozenset(t for t in annos1.intersection(annos2) if inf_content.get(t.id, 0) >= inf_threshold)
-        union = frozenset(t for t in annos1.union(annos2) if inf_content.get(t.id, 0) >= inf_threshold)
+        overlap = frozenset(t for t in annos1.intersection(annos2)
+                            if inf_content.get(t.id, 0) >= inf_threshold)
+        union = frozenset(t for t in annos1.union(annos2)
+                          if inf_content.get(t.id, 0) >= inf_threshold)
 
         bp_terms = frozenset(t for t in overlap if t.aspect == BP)
         if len(bp_terms) > 0:
@@ -67,8 +71,10 @@ def filter_high_inf_content_orthologs(it, threshold):
 
 def extract_processes_with_occurency_range(similar_orthologs, min_cnt=0, max_cnt=-1):
     """returns all the processes that occur min_cnt <= x <= max_cnt in the orthologs"""
-    counts = collections.Counter(itertools.chain.from_iterable((o.processes for o in similar_orthologs)))
-    processes = frozenset((proc for proc, cnt in counts.items() if cnt >= min_cnt and max_cnt < 0 or cnt <= max_cnt))
+    counts = collections.Counter(itertools.chain.from_iterable(
+        (o.processes for o in similar_orthologs)))
+    processes = frozenset((proc for proc, cnt in counts.items()
+                           if cnt >= min_cnt and max_cnt < 0 or cnt <= max_cnt))
     return processes
 
 
@@ -81,7 +87,7 @@ class BestGeneId(GeneNameOrSymbolIdMapper, BestIdPerEntryOnlyMixin):
 def get_gene_names(db, similar_orthologs):
     def enr_rng(k):
         s = set(z.ortholog[k] for z in similar_orthologs)
-        return min(s), max(s)+1
+        return min(s), max(s) + 1
 
     query_range, target_range = (enr_rng(k) for k in (0, 1))
     mapper = BestGeneId(db)
@@ -119,7 +125,9 @@ def compute_omamo_for_species(db_path, ic, query_species, model_species):
     with Database(db_path) as db:
         orthologs = find_orthologs(db, query_species, model_species)
         similar_orthologs = list(
-            filter_high_inf_content_orthologs(go_overlap(db, orthologs=orthologs, inf_content=ic),
+            filter_high_inf_content_orthologs(go_overlap(db,
+                                                         orthologs=orthologs,
+                                                         inf_content=ic),
                                               threshold=0.05))
         return pivot_go_process(db, similar_orthologs, model_species)
 
@@ -132,7 +140,7 @@ def combine_datasets(summaries, details):
     return summary, detail
 
 
-def write_hdf5(fpath, summary:pandas.DataFrame, detail:pandas.DataFrame):
+def write_hdf5(fpath, summary: pandas.DataFrame, detail: pandas.DataFrame):
     import tables
     filters = tables.Filters(complevel=6, complib="zlib")
     with tables.open_file(fpath, 'w', filters=filters) as h5:
@@ -157,7 +165,7 @@ def write_hdf5(fpath, summary:pandas.DataFrame, detail:pandas.DataFrame):
             detail_tab.colinstances[col].create_csindex()
 
 
-def write_csv(fpath, summary:pandas.DataFrame, detail:pandas.DataFrame):
+def write_csv(fpath, summary: pandas.DataFrame, detail: pandas.DataFrame):
     summary['Species'] = summary['Species'].apply(bytes.decode)
     detail['Species'] = detail['Species'].apply(bytes.decode)
     detail['Label'] = detail['Label'].apply(bytes.decode)

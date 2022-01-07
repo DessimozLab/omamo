@@ -17,6 +17,3 @@ def load_informationcontent_from_file(path=None):
     # Create a dictionary where {GO term ID: informaiton content}
     ic = {row['t']: row['ic'] for row in df.to_records()}
     return ic
-
-
-
