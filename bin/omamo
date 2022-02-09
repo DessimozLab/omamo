@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+import os.path
+import omamo
+import argparse
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run omamo for a set of model organisms")
+    parser.add_argument('--db', required=True, help="Path to the HDF5 database")
+    parser.add_argument('--query', default="HUMAN", help="Name of the Query species, defaults to HUMAN")
+    parser.add_argument("--ic", help="Path to the information content file (tsv format)")
+    parser.add_argument("--h5-out", help="Path to the HDF5 output file. If omitted, not stored in this format")
+    parser.add_argument("--tsv-out", help="Path to the TSV output file. If omitted, not stored in this format")
+    parser.add_argument("--models", required=True, nargs="+",
+                        help="List of model species, or a path to a txt file with the model species")
+    conf = parser.parse_args()
+    if os.path.exists(conf.models[0]):
+        with open(conf.models[0], 'r') as fh:
+            models = [line.strip() for line in fh]
+    else:
+        models = conf.models
+
+    ic = omamo.load_informationcontent_from_file(conf.ic)
+    omamo.build_omamo(conf.db, ic, query=conf.query, models=models, h5_out=conf.h5_out, tsv_out=conf.tsv_out)

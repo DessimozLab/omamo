@@ -24,29 +24,38 @@ Firstly, download the OMA dataset:
 wget  https://omabrowser.org/All/OmaServer.h5  -O data/OmaServer.h5  #caution: 94GB
 ```
 
-Secondly, using the file `data/oma-species.txt` find the five-letter UniProt code for species of interest. For example, consider three species _Dicdyostelium discodeium_ , _Neurospora crassa_ and _Schizosaccharomyces pombe_. Their UniProt codes are `DICDI`, `NEUCR` and `SCHPO`, respectively. 
+Secondly, using the file `data/oma-species.txt` find the five-letter UniProt code for species of interest. For example, consider three species _Dicdyostelium discodeium_ , _Neurospora crassa_ and _Schizosaccharomyces pombe_. Their UniProt codes are `DICDI`, `NEUCR` and `SCHPO`, respectively.
 
-Then, run the code `omamo_base.py` for each species code (`DICDI`, `NEUCR` and `SCHPO`):
+Install omamo from the git checkout:
 
-```
-species="DICDI"
-mkdir output; cd output
-
-python3 ../omamo_base.py ../data/OmaServer.h5 ../data/go_positive_annotations.tsv ${species}
+```bash
+pip install <path_to_omamo.git>
 ```
 
+Once the package is installed, you should be able to run `omamo` as a command. With `omamo -h` see the available options:
+```text
+usage: omamo [-h] --db DB [--query QUERY] [--ic IC] [--h5-out H5_OUT] [--tsv-out TSV_OUT] --models MODELS [MODELS ...]
 
+Run omamo for a set of model organisms
 
-Once the code finished running, the outputs include `${species}2.csv` files which should be combined to create a final dataframe using the code `omamo_dataframe.py`:
+optional arguments:
+  -h, --help            show this help message and exit
+  --db DB               Path to the HDF5 database
+  --query QUERY         Name of the Query species, defaults to HUMAN
+  --ic IC               Path to the information content file (tsv format)
+  --h5-out H5_OUT       Path to the HDF5 output file. If omitted, not stored in this format
+  --tsv-out TSV_OUT     Path to the TSV output file. If omitted, not stored in this format
+  --models MODELS [MODELS ...]
+                        List of model species, or a path to a txt file with the model species
+```
+
+In order to create the omamo data for _Dicdyostelium discodeium_, _Neurospora crassa_ and _Schizosaccharomyces pombe_, 
+we would run omamo with the following parameters:
 
 ```
-cd ..
-python3 omamo_dataframe.py output
+omamo --db OmaServer.h5 --query HUMAN --tsv-out omamo_output_df.csv
 ```
-
-where `output` is the name of the directory where the user wishes to save the output. 
-
-Finally, the output data frame is ready as a CSV file `omamo_output_df.csv`. For example, for the GO ID of `GO0000012`, OMAMO provides the following ranking for potential model organisms: 
+Finally, the output data frame is ready as a TSV file `omamo_output_df.csv`. For example, for the GO ID of `GO0000012`, OMAMO provides the following ranking for potential model organisms: 
 
 
 ```
