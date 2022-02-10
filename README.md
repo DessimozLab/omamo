@@ -26,10 +26,10 @@ wget  https://omabrowser.org/All/OmaServer.h5  -O data/OmaServer.h5  #caution: 9
 
 Secondly, using the file `data/oma-species.txt` find the five-letter UniProt code for species of interest. For example, consider three species _Dicdyostelium discodeium_ , _Neurospora crassa_ and _Schizosaccharomyces pombe_. Their UniProt codes are `DICDI`, `NEUCR` and `SCHPO`, respectively.
 
-Install omamo from the git checkout:
+Install omamo. The easiest way is through PyPI:
 
 ```bash
-pip install <path_to_omamo.git>
+pip install omamo
 ```
 
 Once the package is installed, you should be able to run `omamo` as a command. With `omamo -h` see the available options:
