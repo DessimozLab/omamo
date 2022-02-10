@@ -16,6 +16,7 @@ SUMMARY_DTYPE = [("GOnr", "i4"), ("Species", "S5"), ("NrOrthologs", "i4"),
                  ("FuncSim_Mean", "f8"), ("FuncSim_Std", "f8"), ("Score", "f8")]
 DETAIL_DTYPE = [("GOnr", "i4"), ("Species", "S5"), ("Ref", "i1"), ("EntryNr", "i4"),
                 ("Label", "S50")]
+IC_DTYPE = [("GOnr", "i4"), ("ic", "f8")]
 
 
 def find_orthologs(db: Database, query_species: str, model_species: str):
@@ -140,7 +141,7 @@ def combine_datasets(summaries, details):
     return summary, detail
 
 
-def write_hdf5(fpath, summary: pandas.DataFrame, detail: pandas.DataFrame):
+def write_hdf5(fpath, summary: pandas.DataFrame, detail: pandas.DataFrame, ic: dict):
     import tables
     filters = tables.Filters(complevel=6, complib="zlib")
     with tables.open_file(fpath, 'w', filters=filters) as h5:
@@ -156,6 +157,9 @@ def write_hdf5(fpath, summary: pandas.DataFrame, detail: pandas.DataFrame):
                         title="Ortholog information for GO-term in species",
                         obj=detail_data,
                         expectedrows=len(detail_data))
+        ic_data = numpy.fromiter(ic.items(), dtype=IC_DTYPE)
+        h5.create_table('/', 'ic', title="Information Content (IC) of GO terms",
+                        obj=ic_data, expectedrows=len(ic_data))
     with tables.open_file(fpath, 'a') as h5:
         sum_tab = h5.get_node('/omamo/Summary')
         detail_tab = h5.get_node('/omamo/detail')
@@ -193,6 +197,6 @@ def build_omamo(db_path, ic, query, models, h5_out=None, tsv_out=None):
             details.append(d)
     summary, detail = combine_datasets(summaries, details)
     if h5_out is not None:
-        write_hdf5(h5_out, summary, detail)
+        write_hdf5(h5_out, summary, detail, ic)
     if tsv_out is not None:
         write_csv(tsv_out, summary, detail)
