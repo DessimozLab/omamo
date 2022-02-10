@@ -49,27 +49,30 @@ optional arguments:
                         List of model species, or a path to a txt file with the model species
 ```
 
+
+
 In order to create the omamo data for _Dicdyostelium discodeium_, _Neurospora crassa_ and _Schizosaccharomyces pombe_, 
 we would run omamo with the following parameters:
 
 ```
-omamo --db OmaServer.h5 --query HUMAN --tsv-out omamo_output_df.csv
+omamo --db OmaServer.h5 --query HUMAN --tsv-out omamo_output_df.csv --models  DICDI NEUCR SCHPO
 ```
-Finally, the output data frame is ready as a TSV file `omamo_output_df.csv`. For example, for the GO ID of `GO0000012`, OMAMO provides the following ranking for potential model organisms: 
+
+You might face an error about `OSError: ``OmaServer.h5.idx`` does not exist` and `pyoma.browser.db.DBConsistencyError: Suffix index for protein sequences is not available` which you can ignore them. 
+
+Finally, the output data frame is ready as a TSV file `omamo_output_df.csv`. For example, for the GO ID of `GO0000472`, "endonucleolytic cleavage to generate mature 5'-end of SSU-rRNA", OMAMO provides the following ranking for potential model organisms: 
 
 
 ```
 head -n 1 omamo_output_df.csv > ranked_organisms.csv
-awk '$2 == 12'  omamo_output_df.csv >> ranked_organisms.csv
+awk '$1 == 472'  omamo_output_df.csv >> ranked_organisms.csv
 cat ranked_organisms.csv
 
 
-row    GO_ID   Species Human_Genes     Species_Genes   No.of_OGs  Average_func.similarity±st.dev      Score
-
-44	12	SCHPO	A0A024R6L5,A8K3W1	Q9USG9,Q9USR0	2	0.8179 ± 0.0986	1.64
-55	12	NEUCR	A0A024RE06	DNLI4_NEUCR	1	0.292 ± 0.0	0.29
-56	12	DICDI	A0A024RE06	Q54CR9	1	0.2848 ± 0.0	0.28
-
+GOnr	Species	QuerySpeciesGenes	ModelSpeciesGenes NrOrthologs	FuncSim_Mean	FuncSim_Std	Score
+472	DICDI	NOP9;TBL3;ABT1	  Q551Y5;Q7KWS8;esf2	          3  	0.9095	0.1567	2.7286
+472	NEUCR	NOP9;TBL3	         nop9;pod-5	          2  	1.0000	0.0000	2.0000
+472	SCHPO	NOP9;TBL3	         nop9;utp13	          2  	1.0000	0.0000	2.0000
 ```
 
 
@@ -84,7 +87,11 @@ You can also visit the [OMAMO website](https://omabrowser.org/omamo), where you 
 
 ## Change log
 
-Version 0.0.1
+
+#### Version 0.1.0
+- Overhaul and creating pip package
+
+#### Version 0.0.1
 - Initial release
 
 
