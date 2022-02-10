@@ -87,8 +87,10 @@ You can also visit the [OMAMO website](https://omabrowser.org/omamo), where you 
 
 ## Change log
 
+#### Version 0.2.1
+- store ic values in hdf5 database
 
-#### Version 0.1.0
+#### Version 0.2.0
 - Overhaul and creating pip package
 
 #### Version 0.0.1
